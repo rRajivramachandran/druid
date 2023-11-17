@@ -101,8 +101,8 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
                                 + "  \"ts\" : 1471800234\n"
                                 + "}";
     Assert.assertEquals(
-      objectMapper.readTree(expectedJsonBinary),
-      objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampledAsBinary.get(0).getRawValues()))
+        objectMapper.readTree(expectedJsonBinary),
+        objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampledAsBinary.get(0).getRawValues()))
     );
   }
 
