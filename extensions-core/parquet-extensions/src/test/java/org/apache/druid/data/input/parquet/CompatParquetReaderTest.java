@@ -19,7 +19,6 @@
 
 package org.apache.druid.data.input.parquet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.apache.druid.data.input.ColumnsFilter;
 import org.apache.druid.data.input.InputEntityReader;
@@ -89,8 +88,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
         JSONPathSpec.DEFAULT,
         false
     );
-    ObjectMapper objectMapper = new ObjectMapper();
-    ObjectMapper objectMapperBinary = new ObjectMapper();
     List<InputRowListPlusRawValues> sampled = sampleAllRows(reader);
     List<InputRowListPlusRawValues> sampledAsBinary = sampleAllRows(readerNotAsString);
     final String expectedJson = "{\n"
@@ -103,7 +100,10 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
                                 + "  \"field\" : \"aGV5IHRoaXMgaXMgJsOpKC3DqF/Dp8OgKT1eJMO5KiEgzqleXg==\",\n"
                                 + "  \"ts\" : 1471800234\n"
                                 + "}";
-    Assert.assertEquals(objectMapperBinary.readTree(expectedJsonBinary), objectMapperBinary.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampledAsBinary.get(0).getRawValues())));
+    Assert.assertEquals(
+      objectMapper.readTree(expectedJsonBinary),
+      objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampledAsBinary.get(0).getRawValues()))
+    );
   }
 
 
@@ -245,7 +245,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
         schema,
         flattenSpec
     );
-    ObjectMapper objectMapper = new ObjectMapper();
     List<InputRowListPlusRawValues> sampled = sampleAllRows(reader);
     final String expectedJson = "{\n"
                                 + "  \"enumColumn\" : \"SPADES\",\n"
@@ -307,7 +306,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
                                 + "  }\n"
                                 + "}";
     Assert.assertEquals(objectMapper.readTree(expectedJson), objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues())));
-
   }
 
   @Test
@@ -379,7 +377,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
         schema,
         flattenSpec
     );
-    ObjectMapper objectMapper = new ObjectMapper();
     List<InputRowListPlusRawValues> sampled = sampleAllRows(reader);
     final String expectedJson = "{\n"
                                 + "  \"primitive\" : 2,\n"
@@ -389,7 +386,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
                                 + "  } ]\n"
                                 + "}";
     Assert.assertEquals(objectMapper.readTree(expectedJson), objectMapper.readTree(DEFAULT_JSON_WRITER.writeValueAsString(sampled.get(0).getRawValues())));
-
   }
 
   @Test
@@ -428,7 +424,6 @@ public class CompatParquetReaderTest extends BaseParquetReaderTest
         schema,
         flattenSpec
     );
-    ObjectMapper objectMapper = new ObjectMapper();
     List<InputRowListPlusRawValues> sampled = sampleAllRows(reader);
     final String expectedJson = "{\n"
                                 + "  \"optionalMessage\" : null,\n"
